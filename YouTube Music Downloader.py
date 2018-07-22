@@ -38,11 +38,15 @@ def downloadPlaylistAudio(playlist_url):    #courtesy of https://github.com/nfic
     return True
 
 
+
+
 def main():
     """Main method"""
-    playlist_url = 'https://www.youtube.com/playlist?list=PLLKYaQy8XYEz9FlbhzrAF4jvSMvvqab1p'
-    r = downloadPlaylistAudio(playlist_url)
-
+    playlist_url = input("Enter YouTube playlist url: ")
+    try:
+        r = downloadPlaylistAudio(playlist_url)
+    except:
+        print("Error: possibly URL invalid")
 
 if __name__ == "__main__":
     main()
