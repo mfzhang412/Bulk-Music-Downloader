@@ -44,8 +44,10 @@ def downloadVideoAudio(youtube_url,save_location):
     yt = YouTube(youtube_url)
     try:
         yt.streams.filter(only_audio=True).first().download(save_location)   #downloads the highest quality audio stream and saves to designated folder
+        print("Download complete.")
         return True
     except:
+        print("---ERROR---" + video_names[i] + "\t\t" + video_urls[i])
         return False
 
 def downloadPlaylistAudio(playlist_url,save_location):    #courtesy of https://github.com/nficano/pytube
@@ -53,11 +55,12 @@ def downloadPlaylistAudio(playlist_url,save_location):    #courtesy of https://g
     l = getPlaylistURLs(playlist_url)
     video_names = l[0]
     video_urls = l[1]
-    for i in range(len(video_names)):
+    if (len(video_urls) == 0):
+        print("Error: possibly invalid URL or playlist is not made public")
+        return False
+    for i in range(len(video_urls)):
         print("Downloading: " + video_names[i])
         success = downloadVideoAudio(video_urls[i],save_location)
-        if success: print("Download complete.")
-        else: print("---ERROR---" + video_names[i] + "\t\t" + video_urls[i])
     print("\n\nPlaylist finished downloading!")
     return True
 
@@ -70,9 +73,9 @@ def main():
     #playlist_url = input("Enter YouTube playlist url: ")
     choice = choose()
     if choice == 1:
-        url = input("Enter Youtube playlist url: ")
+        url = input("Enter Youtube playlist url:\n")
     elif choice == 2:
-        url = input("Enter YouTube video url: ")
+        url = input("Enter YouTube video url:\n")
     else:   #check to see if choice is valid
         print("That is not a valid choice.")
         return
@@ -82,8 +85,11 @@ def main():
         return
     try:
         print("Downloading... (this may take awhile)")
-        if choice == 1: r = downloadPlaylistAudio(url,save_location)
-        if choice == 2: r = downloadVideoAudio(url,save_location)
+        if choice == 1:
+            r = downloadPlaylistAudio(url,save_location)
+        if choice == 2:
+            r = downloadVideoAudio(url,save_location)
+            print("\n\nSong finished downloading!")
     except:
         print("Error: possibly invalid URL")
 
